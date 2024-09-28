@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 
 
-def config(filename: str="database.ini", section:str="postgresql") -> dict[str]:
+def config(filename: str = "database.ini", section:str = "postgresql") -> dict[str, str]:
     """Получение параметров из конфигурационного файла"""
     parser = ConfigParser()
     parser.read(filename)
