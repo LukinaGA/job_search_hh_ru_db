@@ -33,19 +33,17 @@ class HeadHunterAPI(Parser):
 
         print("Ошибка получения данных")
 
-    def load_vacancies(self) -> list:
+    def load_vacancies(self, employer_name: str) -> list:
         """Получение вакансий с hh.ru"""
-        employers = ["Т-Банк", "СБЕР", "Комос Групп", "Skyeng", "Directum", "Ozon Банк", "Алабуга", "АО ИРЗ",
-                     "Тэйсти Кофе", "Калашников"]
-        for employer in employers:
-            self.__params["text"] = employer
-            while self.__params.get("page") != 1:
-                response = self.__api_connect()
-                if response:
-                    vacancies = response.json()["items"]
-                    self.__vacancies.extend(vacancies)
-                    self.__params["page"] += 1
-                else:
-                    break
+
+        self.__params["text"] = employer_name
+        while self.__params.get("page") != 1:
+            response = self.__api_connect()
+            if response:
+                vacancies = response.json()["items"]
+                self.__vacancies.extend(vacancies)
+                self.__params["page"] += 1
+            else:
+                break
 
         return self.__vacancies

@@ -9,7 +9,16 @@ def create_db(db_name, params) -> None:
     conn.autocommit = True
 
     with conn.cursor() as cur:
-        cur.execute(f"DROP DATABASE IF EXISTS {db_name}")
+        try:
+            cur.execute(f"DROP DATABASE IF EXISTS {db_name}")
+        except psycopg2.errors.ObjectInUse:
+            cur.execute("""
+            SELECT pg_terminate_backend(pg_stat_activity.pid)
+            FROM pg_stat_activity
+            WHERE pg_stat_activity.datname = 'hh_ru'
+            AND pid <> pg_backend_pid();
+            """)
+            cur.execute(f"DROP DATABASE IF EXISTS {db_name}")
         cur.execute(f"CREATE DATABASE {db_name}")
 
     conn.close()
