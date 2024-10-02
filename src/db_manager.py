@@ -1,9 +1,10 @@
-import psycopg2
 from typing import Any
+
+import psycopg2
 
 
 class DBManager:
-    """Класс для получения ифнормации из базы данных"""
+    """Класс для получения ифнормации о вакансиях из базы данных"""
 
     def __init__(self, db_name: str, params: dict[str, Any]) -> None:
         """Инициализато класса DBManager"""
@@ -21,7 +22,8 @@ class DBManager:
             cur.execute(
                 """SELECT employers.employer_name, COUNT(*)
                 FROM vacancies JOIN employers USING(employer_id)
-                GROUP BY employers.employer_name;""")
+                GROUP BY employers.employer_name;"""
+            )
             vacs_counter = cur.fetchall()
 
         conn.close()
@@ -32,8 +34,10 @@ class DBManager:
         """Возвращает список всех вакансий"""
         conn = self.__connect_database()
         with conn.cursor() as cur:
-            cur.execute("""SELECT employers.employer_name, vacancy_name, salary_from, salary_to, vacancies.url
-            FROM vacancies JOIN employers USING(employer_id);""")
+            cur.execute(
+                """SELECT employers.employer_name, vacancy_name, salary_from, salary_to, vacancies.url
+            FROM vacancies JOIN employers USING(employer_id);"""
+            )
             vacs_data = cur.fetchall()
 
         conn.close()
@@ -66,7 +70,7 @@ class DBManager:
 
         return f"Средняя зарплата: {salary_from} - {salary_to}"
 
-    def get_vacancies_with_higher_salary(self):
+    def get_vacancies_with_higher_salary(self) -> list[str]:
         """Возвращает список вакансий, у которых зарплата выше средней"""
         conn = self.__connect_database()
         with conn.cursor() as cur:
@@ -75,7 +79,8 @@ class DBManager:
 
             cur.execute(
                 f"SELECT vacancy_name, salary_from, salary_to, url FROM vacancies "
-                f"WHERE salary_from > {avg_salary} OR salary_to > {avg_salary};")
+                f"WHERE salary_from > {avg_salary} OR salary_to > {avg_salary};"
+            )
 
             vacs = cur.fetchall()
 
@@ -99,7 +104,8 @@ class DBManager:
         with conn.cursor() as cur:
             cur.execute(
                 f"SELECT vacancy_name, salary_from, salary_to, url FROM vacancies "
-                f"WHERE vacancy_name iLIKE '%{keyword}%';")
+                f"WHERE vacancy_name iLIKE '%{keyword}%';"
+            )
             vacs = cur.fetchall()
 
         conn.close()

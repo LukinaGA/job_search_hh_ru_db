@@ -14,8 +14,6 @@ def get_vacancy_info(vacancy_data: dict[str, Any]) -> dict[str, Any]:
     """Получение словаря с данными о вакансии"""
 
     name = vacancy_data.get("name")
-    requirement = vacancy_data.get("snippet").get("requirement")
-    responsibility = vacancy_data.get("snippet").get("responsibility")
     url = vacancy_data.get("alternate_url")
 
     if vacancy_data.get("salary"):
@@ -34,5 +32,9 @@ def get_vacancy_info(vacancy_data: dict[str, Any]) -> dict[str, Any]:
         salary_from = 0
         salary_to = 0
 
-    return {"name": name, "salary_from": salary_from, "salary_to": salary_to, "requirement": requirement,
-            "responsibility": responsibility, "url": url}
+    return {
+        "name": name,
+        "salary_from": salary_from,
+        "salary_to": salary_to,
+        "url": url,
+    }

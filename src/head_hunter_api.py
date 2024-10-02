@@ -4,9 +4,11 @@ import requests
 
 
 class Parser(ABC):
+    """Aбстрактный класс для парсинга"""
 
     @abstractmethod
-    def load_vacancies(self) -> list[dict]:
+    def load_vacancies(self, employer_id: str) -> list[dict]:
+        """Получение вакансий с по API"""
         pass
 
 
@@ -15,15 +17,10 @@ class HeadHunterAPI(Parser):
 
     def __init__(self) -> None:
         """Инициализатор класса HeadHunterAPI"""
-        self.__url = "https://api.hh.ru/vacancies"
-        self.__headers = {"User-Agent": "HH-User-Agent"}
-        self.__params = {"text": "", "page": 0, "per_page": 100}
+        self.__url: str = "https://api.hh.ru/vacancies"
+        self.__headers: dict[str, str] = {"User-Agent": "HH-User-Agent"}
+        self.__params: dict[str, int] = {"employer_id": "", "page": 0, "per_page": 100}
         self.__vacancies: list[dict] = []
-
-    @property
-    def url(self) -> str:
-        """Возвращает cвойство url"""
-        return self.__url
 
     def __api_connect(self) -> requests.Response:
         """Подключение к API hh.ru"""
@@ -33,11 +30,11 @@ class HeadHunterAPI(Parser):
 
         print("Ошибка получения данных")
 
-    def load_vacancies(self, employer_name: str) -> list:
+    def load_vacancies(self, employer_id: str) -> list:
         """Получение вакансий с hh.ru"""
 
-        self.__params["text"] = employer_name
-        while self.__params.get("page") != 1:
+        self.__params["employer_id"] = employer_id
+        while self.__params.get("page") != 5:
             response = self.__api_connect()
             if response:
                 vacancies = response.json()["items"]
