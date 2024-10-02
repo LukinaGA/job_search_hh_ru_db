@@ -24,15 +24,13 @@ def enter_data_into_tables(db_name: str, params: dict[str, Any], employers_data:
             name = vacancy_data.get("name")
             sal_from = vacancy_data.get("salary_from")
             sal_to = vacancy_data.get("salary_to")
-            req = vacancy_data.get("requirement")
-            resp = vacancy_data.get("responsibility")
             url = vacancy_data.get("url")
 
             with conn.cursor() as cur:
                 cur.execute(
-                    """INSERT INTO vacancies (employer_id, vacancy_name, salary_from, salary_to, requirement, responsibility, url)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s);""",
-                    (employer_id, name, sal_from, sal_to, req, resp, url)
+                    """INSERT INTO vacancies (employer_id, vacancy_name, salary_from, salary_to, url)
+                    VALUES (%s, %s, %s, %s, %s);""",
+                    (employer_id, name, sal_from, sal_to, url)
             )
 
     conn.commit()

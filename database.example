@@ -1,5 +1,0 @@
-[postgresql]
-host=localhost
-user=postgres
-password=Your_postgres_password
-port=5432
