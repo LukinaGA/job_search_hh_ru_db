@@ -46,8 +46,6 @@ def create_db(db_name: str, params: dict[str, Any]) -> None:
                 vacancy_name VARCHAR(255) NOT NULL,
                 salary_from FLOAT,
                 salary_to FLOAT,
-                requirement TEXT,
-                responsibility TEXT,
                 url VARCHAR(255))"""
         )
 
